@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -7,6 +8,8 @@ class AuthViewModel extends GetxController {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes:['email']);
   final FirebaseAuth _auth=FirebaseAuth.instance;
   // final FacebookLogin _facebookLogin =FacebookLogin();
+
+  late String email,password,name;
 
   @override
   void onInit() {
@@ -45,9 +48,6 @@ class AuthViewModel extends GetxController {
    UserCredential userCredential= await _auth.signInWithCredential(credential);
      print("I am User : ${userCredential.user}");
 
-
-
-
   }
 
   // void facebookSignInMethod()async{
@@ -61,4 +61,23 @@ class AuthViewModel extends GetxController {
   //     await _auth.signInWithCredential(facebookCredential);
   //   }
   // }
+
+
+void signInWithEmailAndPassword()async{
+
+    try{
+      await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      ).then((value) =>print(value));
+
+    }catch(e){
+
+      print(e.toString());
+      Get.snackbar("Error login account", e.toString(),
+      colorText: Colors.black,
+        snackPosition: SnackPosition.BOTTOM
+      );
+    }
+}
 }
